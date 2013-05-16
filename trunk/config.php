@@ -75,7 +75,7 @@ $AutoLinkTextReplace = '';
 $AutoLinkFull = '0';
 
 //Show hero stats on user page (favorite hero, hero with most kills, deaths, assists...)
-$ShowUserHeroStats = '1';
+$ShowUserHeroStats = '0';
 
 $UserRegistration = '1';
 $AllowComments = '1';
