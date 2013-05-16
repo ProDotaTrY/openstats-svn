@@ -130,10 +130,10 @@ function OS_UpdateScoresTable( $name = "" ) {
 		
 		if ($winner == 1) $score = $ScoreStart + $ScoreWins;
 		if ($winner == 0) $score = $ScoreStart - $ScoreLosses;
-		if ($win==0) $score = $ScoreStart;
+		if ($win==0) { $score = $ScoreStart; $leaver = 0; }
 		
 		if ( $list["left"] <= ($list["duration"] - $MinDuration) ) {
-		   $leaver = 1; $score = "";
+		   $leaver = 1; $score = ""; 
 		} else $leaver = 0;
 		
 		// Score formula for each game (uncomment below to user score formula)
@@ -145,9 +145,9 @@ function OS_UpdateScoresTable( $name = "" ) {
 		if ($win==0) $draw = 1; else $draw = 0;
 		if (!empty($name) AND $duration >= $MinDuration) {
 		
-		//DISC
+		//DISC (if not - DRAW game)
 		if ( $list["left"] <= ($list["duration"] - $LeftTimePenalty) ) {
-		$score = $ScoreStart - $ScoreDisc;
+		$score = $ScoreStart - $ScoreDisc; $winner = 0; $loser = 0;
 		}
 		
 		$result2 = $db->prepare("SELECT player, streak, maxstreak, losingstreak, maxlosingstreak 
@@ -188,13 +188,16 @@ function OS_UpdateScoresTable( $name = "" ) {
 
           } else {
 		  //...or update player data
-		  if ($winner == 1) $score = "score = score + $ScoreWins,";
-		  if ($winner == 0) $score = "score = score - $ScoreLosses,";
-		  if ($win==0) $score = "";
+		  if ($winner == 1 AND $leaver == 0) $score = "score = score + $ScoreWins,";
+		  if ($winner == 0 AND $leaver == 0) $score = "score = score - $ScoreLosses,";
+		  if ($win==0) { $score = ""; $leaver = 0; }
 		  
-		  //DISC
-		  if ( $list["left"] <= ($list["duration"] - $LeftTimePenalty) ) {
-		  $score = "score = score - $ScoreDisc,"; }
+		  //DISC (if not - DRAW game)
+		  if ( $list["left"] <= ( $list["duration"] - $LeftTimePenalty) AND $win!=0 ) {
+		  $score = "score = score - $ScoreDisc,"; 
+		  $winner = 0;
+		  $loser = 0;
+		  }
 		  
 		  $sql3 = "UPDATE ".OSDB_STATS." SET 
 		  $score

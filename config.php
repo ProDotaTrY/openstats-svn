@@ -11,15 +11,15 @@ $password = '';
 $database = 'openstats';
 
 $website = 'http://localhost/openstats/';
-$HomeTitle = 'DotA OpenStats 3';
-$HomeDesc = 'DotA OpenStats 3';
+$HomeTitle = 'DotA OpenStats 4';
+$HomeDesc = 'DotA OpenStats 4';
 $HomeKeywords = 'dota, games, heroes, players, best players, top list, top players, statistics';
 
 $default_language = 'english';
 $DateFormat = 'd.m.Y, H:i';
 $DefaultStyle = 'blogger';
 
-$LogoText = 'DotA OpenStats 3';
+$LogoText = 'DotA OpenStats 4';
 
 //FACEBOOK APP SETUP
 //Enable Login via Facebook
@@ -75,7 +75,7 @@ $AutoLinkTextReplace = '';
 $AutoLinkFull = '0';
 
 //Show hero stats on user page (favorite hero, hero with most kills, deaths, assists...)
-$ShowUserHeroStats = '0';
+$ShowUserHeroStats = '1';
 
 $UserRegistration = '1';
 $AllowComments = '1';
@@ -153,12 +153,12 @@ $LeftTimePenalty = '300';
 //Enable/disable info about time to create page and total queries on every page
 $pageGen = '1'; 
 //Enable error reportings
-$_debug = '1';
+$_debug = '0';
 
 $TimeZone = 'Europe/Belgrade';
 
 //Gamelist patch support
 $GameListPatch = '0';
 
-$OS_INSTALLED = '1';
+$OS_INSTALLED = '0';
 ?>

@@ -185,20 +185,12 @@ if (!isset($website) ) { header('HTTP/1.1 404 Not Found'); die; }
   ?>
   <tr class="row GameHistoryRow">
 	 <td width="220" class="padLeft overflow_hidden slot<?=$Games["newcolour"]?>">
- 	 <?php if ($Games["winner"] == 1) { ?>
- 	 <img src="<?=$website?>img/winner.png" alt="*" width="24" height="24" class="imgvalign" />
- 	 <?php } ?>
- 	 <?php if ($Games["winner"] == 2) { ?>
- 	 <img src="<?=$website?>img/loser.png"  alt="*" width="24" height="24" class="imgvalign" />
- 	 <?php } ?>
- 	 <?php if ($Games["winner"] == 0) { ?>
- 	 <img src="<?=$website?>img/draw.png"   alt="*" width="24" height="24" class="imgvalign" />
- 	 <?php } ?>
-	 
+ 	   <?=OS_WinLoseIcon( $Games["win"] )?>
 	   <a href="<?=$website?>?game=<?=$Games["id"]?>"><span class="winner<?=$Games["winner"]?>"><?=$Games["gamename"]?></span></a>
+	   <?=OS_IsUserGameLeaver($Games["leaver"])?>
 	 </td>
 	 <?php if (isset($_GET["u"]) ) { ?>
-	 <td width="40" height="40"><img width="32" height="32" src="<?=$website?>img/heroes/<?=($Games["hero"])?>.gif" alt="Hero" /></td>
+	 <td width="40" height="40"><?=OS_UserHeroHistoryLink($User["id"], $Games["hero"], $lang["show_hero_history"]) ?></td>
 	 <td width="90">
 	 	<span class="won"><?=($Games["kills"])?></span> / 
 	    <span class="lost"><?=$Games["deaths"]?></span> / 

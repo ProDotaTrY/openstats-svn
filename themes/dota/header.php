@@ -16,5 +16,6 @@ if (!isset($website) ) {header('HTTP/1.1 404 Not Found'); die; }
 	<link rel="index" title="<?=OS_HOME_TITLE?>" href="<?=OS_HOME?>" />
 	
 	<script type="text/javascript" src="<?=$website?>scripts.js"></script>
+	<?php os_js() ?>
 	<?php os_head(); ?>
 </head>
