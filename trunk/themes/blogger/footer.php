@@ -15,6 +15,7 @@ if (!isset($website) ) { header('HTTP/1.1 404 Not Found'); die; }
   </div>
  </div><!-- /ct-wrapper -->
 </div><!-- footer-wrapper -->
+
 </div><!-- blogouter-wrapper -->
 
 <?php os_after_footer(); ?>

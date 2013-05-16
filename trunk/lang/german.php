@@ -156,6 +156,7 @@ $lang["previous_page"] = "Vorrige Seite";
     
 $lang["fastest_game"]   = 'Schnellstes Spiel gewonnen';  
 $lang["longest_game"]   = 'Längstes Spiel gewonnen';  
+$lang["show_hero_history"]    = "Show all games with this hero";
     
 $lang["game_history"]         = "Vergangene Spiele:";  
 $lang["user_game_history"]    = "Vergangene Spiele des SPielers";  
@@ -220,7 +221,8 @@ $lang["avatar"]      = "Avatar";
 $lang["location"]    = "Ort";  
 $lang["realm"]       = "Realm";  
 $lang["website"]     = "Homepage";  
-$lang["gender"]      = "Geschlecht";  
+$lang["gender"]      = "Geschlecht"; 
+$lang["language"]    = "Sprache"; 
 $lang["male"]        = "Männlich";  
 $lang["female"]      = "Weiblich";  
 $lang["password"]    = "Passwort";  

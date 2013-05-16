@@ -180,7 +180,7 @@ if ($PluginEnabled == 1) {
 		
 		if ($winner == 1) $score = $ScoreStart + $ScoreWins;
 		if ($winner == 0) $score = $ScoreStart - $ScoreLosses;
-		if ($win==0) $score = $ScoreStart;
+		if ($win==0) { $score = $ScoreStart; $leaver = 0; }
 		
 		global $MinDuration; 
 		
@@ -192,19 +192,25 @@ if ($PluginEnabled == 1) {
 		
 		if (!empty($name) AND $duration >= OS_MIN_GAME_DURATION) {
 		
-		//DISC
+		//DISC (if not - DRAW game)
 		if ( $list["left"] <= ($list["duration"] - $LeftTimePenalty) ) {
-		$score = $ScoreStart - $ScoreDisc;
+		$score = $ScoreStart - $ScoreDisc; $winner = 0; $loser = 0;
 		}
 		
-		$result2 = $db->prepare("SELECT player FROM ".OSDB_STATS." WHERE LOWER(player) = ?");
+		$result2 = $db->prepare("SELECT player, streak, maxstreak, losingstreak, maxlosingstreak, `score`
+		FROM ".OSDB_STATS." WHERE (player) = ?");
 		$result2->bindValue(1, strtolower( trim($name) ), PDO::PARAM_STR);
-		$result = $result2->execute();
+		$result = $result2->execute(); 
+		if ($result2->rowCount() >=1) {
         $stats = $result2->fetch(PDO::FETCH_ASSOC);
 		$streak = $stats["streak"];
 		$maxstreak = $stats["maxstreak"];
 		$losingstreak = $stats["losingstreak"];
 		$maxlosingstreak = $stats["maxlosingstreak"];
+		$CurrentScore = $stats["score"];
+		} else {
+		  $streak = 0; $maxstreak = 0; $losingstreak = 0; $maxlosingstreak = 0; $CurrentScore = $ScoreStart;
+		}
 		
 		//WIN STREAK
 		//increase maxstreak until lose.
@@ -235,11 +241,14 @@ if ($PluginEnabled == 1) {
 		  //...or update player data
 		  if ($winner == 1) $score = "score = score + $ScoreWins,";
 		  if ($winner == 0) $score = "score = score - $ScoreLosses,";
-		  if ($win==0) $score = "";
+		  if ($win==0) { $score = ""; $leaver = 0; }
 		  
-		  //DISC
-		  if ( $list["left"] <= ($list["duration"] - $LeftTimePenalty) ) {
-		  $score = "score = score - $ScoreDisc,"; }
+		  //DISC (if not - DRAW game)
+		  if ( $list["left"] <= ( $list["duration"] - $LeftTimePenalty) AND $win!=0 ) {
+		  $score = "score = score - $ScoreDisc,"; 
+		  $winner = 0;
+		  $loser = 0;
+		  }
 		  
 		  $sql3 = "UPDATE ".OSDB_STATS." SET 
 		  $score

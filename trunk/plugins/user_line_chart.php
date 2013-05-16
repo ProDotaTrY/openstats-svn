@@ -1,7 +1,7 @@
 <?php
-//Plugin: User Line Chart Stats
+//Plugin: User Line Chart Stats (JQuery)
 //Author: Ivan
-//Allows you to view the history of games for players as a timeline.
+//Allows you to view the history of games for players as a timeline and chart statistics for kda on single game page. <b>JQuery</b> plugin must be enabled on some themes.
 
 if (!isset($website) ) { header('HTTP/1.1 404 Not Found'); die; }
 
@@ -12,6 +12,10 @@ if ($PluginEnabled == 1  ) {
    if (isset($_GET["u"]) AND is_numeric($_GET["u"]) ) {
    AddEvent("os_head","OS_JQuery182");
    AddEvent("os_display_custom_fields","OS_ChartData");
+   }
+   
+   if (isset($_GET["game"]) AND is_numeric($_GET["game"]) ) {
+   AddEvent("os_display_custom_fields","OS_ChartGameData");
    }
    
    function OS_JQuery182() {
@@ -91,10 +95,10 @@ foreach ( $ChartData as $Chart ) {
   $Category = substr($Category, 0, strlen($Category)-2 );
   $Data = substr($Data, 0, strlen($Data)-2 );
 ?>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script type="text/javascript">
-$(function () {
-        $('#container').highcharts({
+jQuery.noConflict();
+jQuery(function () {
+        jQuery('#chart_container').highcharts({
             chart: {
                 type: 'line',
                 marginRight: 100,
@@ -143,14 +147,13 @@ $(function () {
     });
     
 
-		</script>
+</script>
 <?php
    }
    
    function OS_ChartData() {
 ?>
 <script src="<?=OS_HOME.OS_PLUGINS_DIR?>user_line_chart/highcharts.js"></script>
-<script src="<?=OS_HOME.OS_PLUGINS_DIR?>user_line_chart/js/modules/exporting.js"></script>
 <a name="chart"></a>
 <div class="clr"></div>
  <div class="ct-wrapper">
@@ -174,7 +177,7 @@ games
 <a href="<?=OS_HOME?>?u=<?=(int)$_GET["u"]?>&amp;showgames=200&amp;first#chart" class="menuButtons">200</a> 
 games
 </span>
-<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+<div id="chart_container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 
 	 </div>
     </div>
@@ -183,6 +186,99 @@ games
 </div>
 <?php
    }
+   
+   function OS_ChartGameData() {
+    
+	global $GameData;
+	global $lang;
+	if ( !empty( $GameData ) AND is_array($GameData) ) {
+	
+	$Players = "";
+	$Kills = "";
+	$Deaths = "";
+	$Assists = "";
+	$CK = "";
+	$Total = "";
+	foreach( $GameData as $Game) {
+	$Players.= "'".$Game["full_name"]."', "; 
+	$Kills.= $Game["kills"].', ';
+	$Deaths.= $Game["deaths"].', ';
+	$Assists.= $Game["assists"].', ';
+	$CK.= $Game["creepkills"].', ';
+	$Total.= ($Game["kills"] -  $Game["deaths"]) + ($Game["assists"]*0.3).', ';
+	}
+	$Players = substr($Players, 0, strlen($Players)-2 );
+	$Kills = substr($Kills, 0, strlen($Kills)-2 );
+	$Deaths = substr($Deaths, 0, strlen($Deaths)-2 );
+	$Assists = substr($Assists, 0, strlen($Assists)-2 );
+	$CK = substr($CK, 0, strlen($CK)-2 );
+	$Total = substr($Total, 0, strlen($Total)-2 );
+	  ?>
+<script src="<?=OS_HOME.OS_PLUGINS_DIR?>user_line_chart/highcharts.js"></script>
+<script type="text/javascript">
+jQuery.noConflict();
+jQuery(function () {
+        jQuery('#chart_container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '<?=$GameData[0]["gamename"]?>'
+            },
+            subtitle: {
+                text: 'Chart statistics for kills, deaths and assists'
+            },
+            xAxis: {
+                categories: [
+                <?=$Players?>
+                ]
+            },
+            yAxis: {
+                min: -1,
+                title: {
+                    text: 'User Stats Graph'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px;font-weight:bold;">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.1,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '<?=$lang["kills"]?>',
+                data: [<?=$Kills?>]
+    
+            }, {
+                name: '<?=$lang["deaths"]?>',
+                data: [<?=$Deaths?>]
+    
+            }, {
+                name: '<?=$lang["assists"]?>',
+                data: [<?=$Assists?>]
+    
+            }, {
+                name: 'Total',
+                data: [<?=$Total?>]
+			}
+			]
+        });
+    });
+    
+
+</script>
+<div id="chart_container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+	  <?php
+	}
+   } 
    
 }
 ?>
