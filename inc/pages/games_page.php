@@ -159,6 +159,9 @@ if (!isset($website) ) { header('HTTP/1.1 404 Not Found'); die; }
 	if ( $row["newcolour"] <=5  AND $row["winner"] == 2 )  $GamesData[$c]["win"]  = 2; 
 	} else $GamesData[$c]["newcolour"]  = 0;
 	if ( $row["winner"] == 0 ) $GamesData[$c]["win"] = 0;
+	
+	if ( (isset($_GET["uid"]) AND is_numeric($_GET["uid"])) OR isset($_GET["u"])  )
+	if ($row["newcolour"] >5) $GamesData[$c]["newcolour"]-=1; //fix bug with colour (slot 6-7)
 
 	if ( isset( $row["left"] ) ) {
 	$GamesData[$c]["left"] = $row["left"]; 

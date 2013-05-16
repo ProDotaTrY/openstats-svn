@@ -156,7 +156,7 @@ $lang["previous_page"] = "Vorrige Seite";
     
 $lang["fastest_game"]   = 'Schnellstes Spiel gewonnen';  
 $lang["longest_game"]   = 'Längstes Spiel gewonnen';  
-$lang["show_hero_history"]    = "Show all games with this hero";
+$lang["show_hero_history"]    = "Zeige alle Spiele mit diesem Helden";
     
 $lang["game_history"]         = "Vergangene Spiele:";  
 $lang["user_game_history"]    = "Vergangene Spiele des SPielers";  
